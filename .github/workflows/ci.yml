@@ -28,7 +28,7 @@ jobs:
         run: npm ci --prefix=src/__tests__/__apps__/basic
 
       - name: 'Test: unit & end-to-end tests'
-        run: npm test:unit
+        run: npm run test:unit
 
       - name: 'Test: linting'
         run: npm run test:lint
