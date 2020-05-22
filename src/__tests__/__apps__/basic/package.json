@@ -12,16 +12,16 @@
   "license": "ISC",
   "dependencies": {
     "lodash-es": "^4.17.15",
-    "next": "9.3.0",
-    "react": "^16.13.0",
+    "next": "9.4.0",
+    "react": "^16.13.1",
     "react-dom": "^16.13.0",
-    "sass": "^1.26.2",
+    "sass": "^1.26.5",
     "shared": "file:../_shared",
     "shared-ts": "file:../_shared-ts",
     "shared-ui": "file:../_shared-ui"
   },
   "devDependencies": {
-    "@types/react": "^16.9.23",
-    "@types/react-dom": "^16.9.5"
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8"
   }
 }
