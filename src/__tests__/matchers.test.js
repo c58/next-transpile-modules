@@ -11,7 +11,7 @@ const modules = ['shared', 'and-another', '@scoped/something', 'core'];
 const absoluteModules = [
   'C:\\workspace\\project\\packages\\core',
   'C:\\workspace\\project\\packages\\ui',
-  'C:\\workspace\\project\\packages\\feature'
+  'C:\\workspace\\project\\packages\\feature',
 ];
 
 describe('generateIncludes', () => {
@@ -41,7 +41,7 @@ describe('generateIncludes', () => {
     expect(anymatch(includes, '/users/pierre/project/node_modules/shared/node_modules/other/test.js')).toBe(false);
     expect(anymatch(includes, '/users/pierre/project/node_modules/and-another/node_modules/other/test.js')).toBe(false);
     expect(anymatch(includes, '/users/pierre/project/node_modules/@scoped/node_modules/other/something/test.js')).toBe(
-      false
+      false,
     );
   });
 
@@ -65,7 +65,7 @@ describe('generateIncludes', () => {
     expect(anymatch(absoluteIncludes, 'C:\\workspace\\project\\packages\\core\\sub\\index.js')).toBe(true);
     expect(anymatch(absoluteIncludes, 'C:\\workspace\\project\\packages\\ui\\index.js')).toBe(true);
     expect(
-      anymatch(absoluteIncludes, 'C:\\workspace\\project\\packages\\feature\\node_modules\\external\\index.js')
+      anymatch(absoluteIncludes, 'C:\\workspace\\project\\packages\\feature\\node_modules\\external\\index.js'),
     ).toBe(false);
   });
 });
@@ -98,7 +98,7 @@ describe('generateExcludes', () => {
     expect(anymatch(excludes, '/users/pierre/project/node_modules/shared/node_modules/other/test.js')).toBe(true);
     expect(anymatch(excludes, '/users/pierre/project/node_modules/and-another/node_modules/other/test.js')).toBe(true);
     expect(anymatch(excludes, '/users/pierre/project/node_modules/@scoped/node_modules/other/something/test.js')).toBe(
-      true
+      true,
     );
   });
 
@@ -113,7 +113,7 @@ describe('generateExcludes', () => {
 
   test('SHOULD match node_modules packages inside a absolute transpiled module', () => {
     expect(anymatch(absoluteExcludes, 'C:\\workspace\\project\\packages\\feature\\node_modules\\other\\test.js')).toBe(
-      true
+      true,
     );
   });
 

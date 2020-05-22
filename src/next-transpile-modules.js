@@ -20,15 +20,15 @@ const regexEqual = (x, y) => {
 const generateIncludes = (modules) => {
   return [
     new RegExp(`(${modules.map(safePath).join('|')})$`),
-    new RegExp(`(${modules.map(safePath).join('|')})${PATH_DELIMITER}(?!.*node_modules)`)
+    new RegExp(`(${modules.map(safePath).join('|')})${PATH_DELIMITER}(?!.*node_modules)`),
   ];
 };
 
 const generateExcludes = (modules) => {
   return [
     new RegExp(
-      `node_modules${PATH_DELIMITER}(?!(${modules.map(safePath).join('|')})(${PATH_DELIMITER}|$)(?!.*node_modules))`
-    )
+      `node_modules${PATH_DELIMITER}(?!(${modules.map(safePath).join('|')})(${PATH_DELIMITER}|$)(?!.*node_modules))`,
+    ),
   ];
 };
 
@@ -53,7 +53,7 @@ const withTmInitializer = (transpileModules = []) => {
         // Safecheck for Next < 5.0
         if (!options.defaultLoaders) {
           throw new Error(
-            'This plugin is not compatible with Next.js versions below 5.0.0 https://err.sh/next-plugins/upgrade'
+            'This plugin is not compatible with Next.js versions below 5.0.0 https://err.sh/next-plugins/upgrade',
           );
         }
 
@@ -69,7 +69,7 @@ const withTmInitializer = (transpileModules = []) => {
             if (typeof external !== 'function') return external;
             return (ctx, req, cb) => {
               return includes.find((include) =>
-                req.startsWith('.') ? include.test(path.resolve(ctx, req)) : include.test(req)
+                req.startsWith('.') ? include.test(path.resolve(ctx, req)) : include.test(req),
               )
                 ? cb()
                 : external(ctx, req, cb);
@@ -81,7 +81,7 @@ const withTmInitializer = (transpileModules = []) => {
         config.module.rules.push({
           test: /\.+(js|jsx|mjs|ts|tsx)$/,
           loader: options.defaultLoaders.babel,
-          include: includes
+          include: includes,
         });
 
         // Support CSS modules + global in node_modules
@@ -91,11 +91,11 @@ const withTmInitializer = (transpileModules = []) => {
         // .module.css
         if (nextCssLoaders) {
           const nextCssLoader = nextCssLoaders.oneOf.find(
-            (rule) => rule.sideEffects === false && regexEqual(rule.test, /\.module\.css$/)
+            (rule) => rule.sideEffects === false && regexEqual(rule.test, /\.module\.css$/),
           );
 
           const nextSassLoader = nextCssLoaders.oneOf.find(
-            (rule) => rule.sideEffects === false && regexEqual(rule.test, /\.module\.(scss|sass)$/)
+            (rule) => rule.sideEffects === false && regexEqual(rule.test, /\.module\.(scss|sass)$/),
           );
 
           if (nextCssLoader) {
@@ -116,7 +116,7 @@ const withTmInitializer = (transpileModules = []) => {
               rule.use.options &&
               rule.use.options.reason ===
                 'CSS Modules \u001b[1mcannot\u001b[22m be imported from within \u001b[1mnode_modules\u001b[22m.\n' +
-                  'Read more: https://err.sh/next.js/css-modules-npm'
+                  'Read more: https://err.sh/next.js/css-modules-npm',
           );
 
           if (nextErrorCssModuleLoader) {
@@ -130,7 +130,7 @@ const withTmInitializer = (transpileModules = []) => {
               rule.use.options &&
               rule.use.options.reason ===
                 'Global CSS \u001b[1mcannot\u001b[22m be imported from within \u001b[1mnode_modules\u001b[22m.\n' +
-                  'Read more: https://err.sh/next.js/css-npm'
+                  'Read more: https://err.sh/next.js/css-npm',
           );
 
           if (nextErrorCssGlobalLoader) {
@@ -163,7 +163,7 @@ const withTmInitializer = (transpileModules = []) => {
         }
 
         return config;
-      }
+      },
     });
   };
 
