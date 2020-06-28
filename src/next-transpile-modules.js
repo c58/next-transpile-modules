@@ -99,13 +99,13 @@ const withTmInitializer = (transpileModules = []) => {
           );
 
           if (nextCssLoader) {
-            nextCssLoader.issuer.include = nextCssLoader.issuer.include.concat(includes);
-            nextCssLoader.issuer.exclude = excludes;
+            nextCssLoader.issuer.and = nextCssLoader.issuer.and.concat(includes);
+            nextCssLoader.issuer.not = excludes;
           }
 
           if (nextSassLoader) {
-            nextSassLoader.issuer.include = nextCssLoader.issuer.include.concat(includes);
-            nextSassLoader.issuer.exclude = excludes;
+            nextSassLoader.issuer.and = nextCssLoader.issuer.and.concat(includes);
+            nextSassLoader.issuer.not = excludes;
           }
 
           // Hack our way to disable errors on node_modules CSS modules
