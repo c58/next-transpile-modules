@@ -88,6 +88,18 @@ const withTmInitializer = (transpileModules = []) => {
         // TODO ask Next.js maintainer to expose the css-loader via defaultLoaders
         const nextCssLoaders = config.module.rules.find((rule) => typeof rule.oneOf === 'object');
 
+        // .css
+        if (nextCssLoaders) {
+          const nextCssLoader = nextCssLoaders.oneOf.find(
+            (rule) => rule.sideEffects === true && regexEqual(rule.test, /(?<!\.module)\.css$/)
+          );
+          if (nextCssLoader) {
+            nextCssLoader.issuer = {
+              or: includes.concat(nextCssLoader.issuer.and)
+            };
+          }
+        }
+
         // .module.css
         if (nextCssLoaders) {
           const nextCssLoader = nextCssLoaders.oneOf.find(
@@ -99,13 +111,17 @@ const withTmInitializer = (transpileModules = []) => {
           );
 
           if (nextCssLoader) {
-            nextCssLoader.issuer.and = nextCssLoader.issuer.and.concat(includes);
-            nextCssLoader.issuer.not = excludes;
+            nextCssLoader.issuer = {
+              or: includes.concat(nextCssLoader.issuer.and),
+              not: nextCssLoader.issuer.not.concat(excludes)
+            };
           }
 
           if (nextSassLoader) {
-            nextSassLoader.issuer.and = nextCssLoader.issuer.and.concat(includes);
-            nextSassLoader.issuer.not = excludes;
+            nextSassLoader.issuer = {
+              or: includes.concat(nextSassLoader.issuer.and),
+              not: nextSassLoader.issuer.not.concat(excludes)
+            };
           }
 
           // Hack our way to disable errors on node_modules CSS modules
@@ -123,7 +139,7 @@ const withTmInitializer = (transpileModules = []) => {
             nextErrorCssModuleLoader.exclude = includes;
           }
 
-          const nextErrorCssGlobalLoader = nextCssLoaders.oneOf.find(
+          const nextErrorCssNPMGlobalLoader = nextCssLoaders.oneOf.find(
             (rule) =>
               rule.use &&
               rule.use.loader === 'error-loader' &&
@@ -131,6 +147,20 @@ const withTmInitializer = (transpileModules = []) => {
               rule.use.options.reason ===
                 'Global CSS \u001b[1mcannot\u001b[22m be imported from within \u001b[1mnode_modules\u001b[22m.\n' +
                   'Read more: https://err.sh/next.js/css-npm'
+          );
+
+          if (nextErrorCssNPMGlobalLoader) {
+            nextErrorCssNPMGlobalLoader.exclude = includes;
+          }
+
+          const nextErrorCssGlobalLoader = nextCssLoaders.oneOf.find(
+            (rule) =>
+              rule.use &&
+              rule.use.loader === 'error-loader' &&
+              rule.use.options &&
+              rule.use.options.reason ===
+                'Global CSS \u001b[1mcannot\u001b[22m be imported from files other than your \u001b[1mCustom <App>\u001b[22m. Please move all global CSS imports to \u001b[36mpages/_app.js\u001b[39m.\n' +
+                  'Read more: https://err.sh/next.js/css-global'
           );
 
           if (nextErrorCssGlobalLoader) {
